@@ -73,7 +73,7 @@ function changeLevel() {
     j = 0;
 }
 
-document.on("keydown", function () {
+$("body").on("keydown", function () {
     if (!started) {
         started = true;
         level++;
