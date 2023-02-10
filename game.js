@@ -3,7 +3,6 @@ let gamePattern = [];
 let j = 0;
 let started = false;
 let level = 0;
-let gameActive = true;
 
 function playAudio(filename) {
     new Audio("assets/sounds/" + filename + ".mp3").play().then(null);
@@ -12,28 +11,26 @@ function playAudio(filename) {
 function resetGame() {
     $(".container").hide();
     let score = level - 1;
-    level = 0;
-    gamePattern = [];
     $("body").addClass("game-over");
     setTimeout(function () {
         $("body").removeClass("game-over");
     }, 200);
     $("h1").html("Game Over!!<br><br>Total Levels Cleared:" + score + "<br><br>Press any key to restart!");
-    $(document).on("keydown", function () {
-        if (!gameActive) {
-            $(".container").show();
-            changeLevel();
-            setTimeout(function () {
-                startLevel();
-                gameActive = true;
-            }, 500);
-        }
+    $("body").on("keypress", function () {
+        level = 0;
+        gamePattern = [];
+        $(".container").show();
+        changeLevel();
+        setTimeout(function () {
+            startLevel();
+        }, 500);
     });
 }
 
 function startLevel() {
-    gamePattern.push(Math.floor(Math.random() * 4));
+    $("body").off();
     if (level > 0) {
+        gamePattern.push(Math.floor(Math.random() * 4));
         let randomColor = buttonColors[gamePattern[level - 1]];
         randomChooseAnimation(randomColor);
         playAudio(randomColor);
@@ -58,7 +55,6 @@ $("." + "btn").on("click", function () {
 
             }
         } else {
-            gameActive = false;
             resetGame();
         }
     }
@@ -74,11 +70,10 @@ function changeLevel() {
     j = 0;
 }
 
-$("body").on("keydown", function () {
-    if (!started) {
+if (!started) {
+    $("body").on("keypress", function (event) {
         started = true;
-        level++;
-        $("h1").text("Level " + level);
+        changeLevel();
         startLevel();
-    }
-});
+    });
+}
