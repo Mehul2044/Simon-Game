@@ -13,6 +13,7 @@ function resetGame() {
     $(".container").hide();
     let score = level - 1;
     level = 0;
+    gamePattern = [];
     $("body").addClass("game-over");
     setTimeout(function () {
         $("body").removeClass("game-over");
